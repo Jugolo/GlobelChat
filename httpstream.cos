@@ -1,0 +1,30 @@
+public function parseHttpHeader(reader){
+  result = [];
+
+  while((buffer = reader->readLine()) != null && buffer != "" && !hasKey(result, "error")){
+    if(result->length() == 0){
+       getPageData(buffer, result);
+       continue;
+    }
+
+    result[line->substr(0, line->indexOf(":"))] = line->substr(line->indexOf(":")+1);
+  }
+
+  return result;
+}
+
+function getPageData(string line, array result){
+   if(line->indexOf("POST") == 0){
+     result["method"] = "POST";
+   }elseif(line->indexOf("GET") == 0){
+     result["method"] = "GET";
+   }else{
+     result["error"] = "Unknown greeting message from the client: "+line;
+     return;
+   }
+
+   line = line->substr(result["method"]->length()+1);
+
+   result["page"] = line->substr(0, line->indexOf(" "));
+   result["protocol"] = line->substr(result["page"]);
+}
