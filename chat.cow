@@ -1,0 +1,8 @@
+use "tcp";
+use "httpstream.cos";
+
+server = new TcpServer("localhost", 80);
+server->listen(function(stream){
+  header = parseHttpHeader(stream->reader);
+  body   = parseHttpBody(stream->reader);
+});
